@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API&M Unit-05</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f9f9f9;
+            color: #333;
+            font-size: 1rem;
+        }
+
+        header {
+            background-color: #0077cc;
+            color: white;
+            padding: 1rem 0.5rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 1.2rem auto;
+            padding: 1rem;
+            background: white;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.06);
+        }
+
+        h2 {
+            color: #0077cc;
+            margin: 1.2rem 0 0.8rem;
+            font-size: 1.25rem;
+        }
+
+        ul {
+            margin: 0.4rem 0 0.7rem 0.7rem;
+            padding-left: 0.7rem;
+        }
+
+        ul ul {
+            margin-left: 0.7rem;
+            padding-left: 0.7rem;
+        }
+
+        li>ul {
+            margin-top: 0.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        .code-label {
+            background: #e0e0e0;
+            padding: 4px 10px;
+            display: inline-block;
+            font-weight: bold;
+            color: #000;
+            border-radius: 6px 6px 0 0;
+            margin-left: 1rem;
+            font-size: 0.95rem;
+        }
+
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 0 6px 6px 6px;
+            overflow-x: auto;
+            margin: -6px 0 0.6rem 1rem;
+            font-size: 0.95rem;
+            border: 1px solid #ddd;
+        }
+
+        .output {
+            margin: 0 0 0 1.2rem;
+            padding: 0.45rem 0.8rem;
+            font-size: 1rem;
+            background: #f8f8fa;
+            border-radius: 4px;
+            border-left: 3px solid #50aaff;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0.7rem;
+            }
+
+            h2 {
+                font-size: 1.13rem;
+                margin-top: 1rem;
+            }
+
+            .code-label,
+            pre {
+                margin-left: 0.5rem;
+                font-size: 0.87rem;
+            }
+
+            .output {
+                margin-left: 0.6rem;
+                font-size: 0.96rem;
+                padding: 0.36rem 0.6rem;
+            }
+                 th,
+      td {
+        padding: 0.6rem;
+      }
+
+      /* Ensure the responsive wrapper works well on narrow viewports */
+      .table-responsive table {
+        min-width: 520px;
+      }
+
+      .table-responsive {
+        margin-bottom: 1rem;
+      }
+    }
+
+    @media print {
+      .container {
+        page-break-after: always;
+      }
+    
+        }
+
+        @media (max-width: 480px) {
+
+            ul,
+            ul ul {
+                margin-left: 0.46rem !important;
+                padding-left: 0.5rem !important;
+            }
+        }
+
+        img {
+            display: block;
+            max-width: 58%;
+            height: auto;
+            max-height: 270px;
+            object-fit: contain;
+            margin: 1rem auto;
+            border-radius: 6px;
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+            border: 1px solid #ddd;
+        }
+
+        img:hover {
+            transform: scale(1.04);
+        }
+
+        #lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            backdrop-filter: blur(6px);
+        }
+
+        #lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #lightbox img {
+            max-width: 88%;
+            max-height: 88%;
+            border-radius: 10px;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+            transform: scale(0.85);
+            transition: transform 0.3s ease;
+            cursor: zoom-out;
+        }
+
+        #lightbox.active img {
+            transform: scale(1);
+        }
+
+        #image-tip {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 119, 204, 0.96);
+            color: #fff;
+            padding: 0.7rem 1.1rem;
+            border-radius: 6px;
+            font-size: 0.92rem;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease;
+            white-space: nowrap;
+        }
+
+        #image-tip.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (max-width: 480px) {
+            #image-tip {
+                font-size: 0.85rem;
+                padding: 0.6rem 1rem;
+            }
+        }
+        table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      background: transparent;
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 0.8rem;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #0077cc;
+      color: white;
+      font-weight: bold;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tr:hover {
+      background-color: #e6f0ff;
+    }
+
+    /* Make tables horizontally scrollable on small screens instead of restructuring into blocks.
+       This preserves semantics and improves readability. */
+    .table-responsive {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      width: 100%;
+    }
+
+    /* optional minimum width so complex tables remain readable on desktop and can scroll on mobile */
+    .table-responsive table {
+      min-width: 640px; /* adjust as needed */
+    }
+    </style>
+       <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WJ8GK8VNS9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-WJ8GK8VNS9');
+</script>
+</head>
+
+<body>
+    <header><strong>API&M Unit-05</strong></header>
+    <div class="container">
+        <h2><strong>1)Rest Architecture:</strong></h2>
+        <ul class="i">
+            <img src="WhatsApp Image 2025-11-24 at 16.45.54_a2af19c6.jpg"/>
+            <li><strong>Key Concepts:</strong>
+                <ul>
+                    <li><strong>i)Statelessness:</strong>
+                        <ul>
+                            <li>The server does not store any client session</li>
+                        </ul>
+                    </li>
+                    <li><strong>ii)Key Annotations:</strong>
+                        <ul>
+                            <li>@RestController</li>
+                            <li>@RequestMapping</li>
+                            <li>@GetMapping, @PostMapping, @PutMapping, @DeleteMapping</li>
+                            <li>@RequestBody, @PathVariable, @RequestParam</li>
+                        </ul>
+                    </li>
+                    <li><strong>iii)JSON/XML format:</strong>
+                        <ul>
+                            <li>All Resources can be in HTML, JSON or XML format</li>
+                            <li>Spring REST convert all Resources into JSON/XML format</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><strong>Syntax:</strong>
+                <pre>@RestController
+@RequestMapping("/request")
+public class A
+{
+  ...
+  @GetMapping("/get")
+  ...
+  @PostMapping("/post")
+  ...
+  @PutMapping("/put")
+  ...
+  @DeleteMapping("/delete")
+  ...
+}</pre>
+            </li>
+            <li><strong>Program:</strong></li>
+            <div class="code-label">A.java</div>
+            <pre>@RestController
+@RequestMapping("/request")
+public class A
+{
+  @GetMapping("/get")
+  public String get()
+  {
+    return "CC";
+  }
+  @PostMapping("/post")
+  public String post()
+  {
+    return "WNS";
+  }
+  @PutMapping("/put")
+  public String put()
+  {
+    return "API&M";
+  }
+  @DeleteMapping("/delete")
+  public String delete()
+  {
+    return "SCT";
+  }
+}</pre>
+            <div class="code-label">Main.java</div>
+            <pre>@SpringBootApplication
+public class Main
+{
+  public static void main(String[] args)
+  {
+    SpringApplication.run(Main.class, args);
+  }
+}</pre>
+            <li><strong>Output:</strong></li>
+            <div class="output"><strong>CC</strong></div>
+            <div class="output"><strong>WNS</strong></div>
+            <div class="output"><strong>API&M</strong></div>
+            <div class="output"><strong>SCT</strong></div>
+        </ul>
+    </div>
+
+    <header><strong>API&M Unit-05</strong></header>
+    <div class="container">
+        <h2><strong>2)Response Entity:</strong></h2>
+        <ul class="i">
+            <li>Response Entity represents the full HTTP Response</li>
+            <li>It includes:
+                <ul>
+                    <li>-HTTP Status Code</li>
+                    <li>-Response Header</li>
+                    <li>-Response Body</li>
+                </ul>
+            </li>
+            <li>-Response Entity returns "Status + Body"</li>
+            <li><strong>Syntax:</strong>
+                <pre>@RestController
+@RequestMapping("/request")
+public class A
+{
+  ...
+  @GetMapping("/get")
+  Public String get()
+  {
+     return ResponseEntity.ok();
+  }
+  ...
+}</pre>
+            </li>
+            <li><strong>Program:</strong></li>
+            <div class="code-label">A.java</div>
+            <pre>@RestController
+@RequestMapping("/request")
+public class A
+{
+  @GetMapping("/get")
+  public String get()
+  {
+    return ResponseEntity.ok("CC");
+  }
+  @PostMapping("/post")
+  public String post()
+  {
+    return ResponseEntity.ok("WNS");
+  }
+  @PutMapping("/put")
+  public String put()
+  {
+    return ResponseEntity.ok("API&M");
+  }
+  @DeleteMapping("/delete")
+  public String delete()
+  {
+    return ResponseEntity.ok("SCT");
+  }
+}</pre>
+            <div class="code-label">Main.java</div>
+            <pre>@SpringBootApplication
+public class Main
+{
+  public static void main(String[] args)
+  {
+    SpringApplication.run(Main.class, args);
+  }
+}</pre>
+            <li><strong>Output:</strong></li>
+            <div class="output"><strong>Status: 200 OK</strong><br><strong>Body:</strong><br><strong>CC</strong></div>
+            <div class="output"><strong>Status: 200 OK</strong><br><strong>Body:</strong><br><strong>WNS</strong></div>
+            <div class="output"><strong>Status: 200 OK</strong><br><strong>Body:</strong><br><strong>API&M</strong></div>
+            <div class="output"><strong>Status: 200 OK</strong><br><strong>Body:</strong><br><strong>SCT</strong></div>
+        </ul>
+    </div>
+
+    <header><strong>API&M Unit-05</strong></header>
+    <div class="container">
+        <h2><strong>3)When to Use ResponseEntity?</strong></h2>
+        <ul class="i">
+            <li><strong>i)HTTP Status Code:</strong>
+                <ul>
+                    <li>We use ResponseEntity to send custom HTTP status code</li>
+                    <li>Example:
+                        <ul>
+                            <li>2xx -> Success</li>
+                            <li>4xx -> Client Error</li>
+                            <li>5xx -> Server Error</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><strong>ii)Response Header:</strong>
+                <ul>
+                    <li>Information about Response</li>
+                    <li>Example:
+                        <ul>
+                            <li>CORS</li>
+                            <li>Content Type</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><strong>iii)Response Body:</strong>
+                <ul>
+                    <li>-It contains the actual data</li>
+                </ul>
+            </li>
+            <li><strong>iii)Instead of POJO:</strong>
+                <ul>
+                    <li>-POJO + status + header + body</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <header><strong>API&M Unit-05</strong></header>
+    <div class="container">
+        <h2><strong>4)@PathVariable, @RequestParam, and @MatrixVariable</strong></h2>
+        <ul class="i">
+            <li><strong>(or)</strong></li>
+            <li><strong>Handling Optional & Required Parameters in Spring REST?</strong></li>
+            <li><strong>@PathVariable:</strong>
+                <ul>
+                    <li>Extract the values from the URL</li>
+                </ul>
+            </li>
+            <li><strong>@RequestParam:</strong>
+                <ul>
+                    <li>Extract the values from query parameters</li>
+                </ul>
+            </li>
+            <li><strong>@MatrixVariable:</strong>
+                <ul>
+                    <li>Extract the values from matrix parameters</li>
+                </ul>
+            </li>
+            <li><strong>Program:</strong></li>
+            <div class="code-label">A.java</div>
+            <pre>@RestController
+@RequestMapping("/request")
+public class A
+{
+  @GetMapping("/get/{sub1}")
+  public String get(@PathVariable String sub1)
+  {
+    return sub1;
+  }
+  @PostMapping("/post")
+  public String post(@RequestParam String sub2)
+  {
+    return sub2;
+  }
+  @PutMapping("/put/{data}")
+  public String put(@MatrixVariable String sub3)
+  {
+    return sub3;
+  }
+}</pre>
+            <div class="code-label">Main.java</div>
+            <pre>@SpringBootApplication
+public class Main
+{
+  public static void main(String[] args)
+  {
+    SpringApplication.run(Main.class, args);
+  }
+}</pre>
+            <li><strong>Output:</strong></li>
+            <div class="output"><strong>CC</strong></div>
+            <div class="output"><strong>WNS</strong></div>
+            <div class="output"><strong>API&M</strong></div>
+        </ul>
+    </div>
+
+    <header><strong>API&M Unit-05</strong></header>
+    <div class="container">
+        <h2><strong>5)@ExceptionHandler</strong></h2>
+        <ul class="i">
+            <li><strong>Program:</strong></li>
+            <div class="code-label">A.java</div>
+            <pre>@RestController
+@RequestMapping("/request")
+public class A
+{
+  @PostMapping("/post")
+  public String post()
+  {
+    return "CC";
+  }
+}</pre>
+            <div class="code-label">B.java</div>
+            <pre>@ControllerAdvice
+Public class B
+{
+  @ExceptionHandler(RuntimeException.class)
+  public ResponseEntity fun(RuntimeException ex)
+  {
+     return ResponseEntity.ok(ex.getMessage());
+  }
+}</pre>
+            <div class="code-label">Main.java</div>
+            <pre>@SpringBootApplication
+public class Main
+{
+  public static void main(String[] args)
+  {
+    SpringApplication.run(Main.class, args);
+  }
+}</pre>
+            <li><strong>Output:</strong></li>
+            <div class="output"><strong>CC</strong></div>
+        </ul>
+    </div>
+
+    <header><strong>API&M Unit-05</strong></header>
+    <div class="container">
+        <h2><strong>6)DTO or Input Validation</strong></h2>
+        <ul class="i">
+            <li>DTO stands for Data Transfer Object</li>
+            <li><strong>Key annotations:</strong>
+                <ul>
+                    <li>Triggering Validation(@Valid)</li>
+                    <li>Bean Validation(@NotBlank, @NotNull, @Size)</li>
+                    <li>Exception Handling(@ControllerAdvice, @ExceptionHandler)</li>
+                </ul>
+            </li>
+            <li><strong>@Valid:</strong>
+                <ul>
+                    <li><strong>Syntax:</strong>
+                        <pre>public string function(@Valid @RequestBody X obj)
+{
+  ...
+}</pre>
+                    </li>
+                </ul>
+            </li>
+            <li><strong>@NotBlank, @NotNUll and @Size:</strong>
+                <ul>
+                    <li><strong>Syntax:</strong>
+                        <pre>@NotBlank
+@NotNull
+@Size(min = 3, message = "...")
+Public String a;
+...</pre>
+                    </li>
+                </ul>
+            </li>
+            <li><strong>Program:</strong></li>
+            <div class="code-label">X.java</div>
+            <pre>public static class X
+{
+    @NotBlank
+    @NotNull
+    @Size(min = 3, message = "...")
+    public String a;
+    public String fun()
+    {
+        return a;
+    }
+}</pre>
+            <div class="code-label">A.java</div>
+            <pre>@RestController
+@RequestMapping("/request")
+public class A
+{
+  @PostMapping("/post")
+  public String post(@Valid @RequestBody X obj)
+  {
+    return "CC";
+  }
+}</pre>
+            <div class="code-label">B.java</div>
+            <pre>@ControllerAdvice
+Public class B
+{
+  @ExceptionHandler(RuntimeException.class)
+  public ResponseEntity fun(RuntimeException ex)
+  {
+     return ResponseEntity.ok(ex.getMessage());
+  }
+}</pre>
+            <div class="code-label">Main.java</div>
+            <pre>@SpringBootApplication
+public class Main
+{
+  public static void main(String[] args)
+  {
+    SpringApplication.run(Main.class, args);
+  }
+}</pre>
+            <li><strong>Output:</strong></li>
+            <div class="output"><strong>CC</strong></div>
+        </ul>
+    </div>
+
+    <header><strong>API&M Unit-05</strong></header>
+    <div class="container">
+        <h2><strong>7)API Versioning:</strong></h2>
+        <ul class="i">
+            <li>The process of generating multiple versions of the same API is called as API Versioning</li>
+            <li><strong>Techniques:</strong>
+                <ul>
+                    <li><strong>a)URI Path Versioning:</strong>
+                        <ul>
+                            <li>Version is added in the URL path</li>
+                            <li>Example:
+                                <ul>
+                                    <li>https://www.google.com/api/version1</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><strong>b)Request Parameter Versioning:</strong>
+                        <ul>
+                            <li>Version is added in the Query Parameter</li>
+                            <li>Example:
+                                <ul>
+                                    <li>https://www.google.com/api?Version=1</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><strong>c)Header Versioning:</strong>
+                        <ul>
+                            <li>Version is added in the HTTP Header</li>
+                            <li>Example:
+                                <ul>
+                                    <li>X-API-VERSION: 1</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><strong>d)MIME type versioning:</strong>
+                        <ul>
+                            <li>Version is added in the Accept Header</li>
+                            <li>Example:
+                                <ul>
+                                    <li>Accept: application/vnd.api.v1+json</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <header><strong>API&M Unit-05</strong></header>
+    <div class="container">
+        <h2><strong>8)Implement basic authentication</strong></h2>
+        <ul class="i">
+            <li><strong>Security Dependencies:</strong>
+                <pre><dependencies>
+  <dependency>
+    ...
+  </dependency>
+  <dependency>
+    ...
+  </dependency>
+  <dependency>
+    ...
+  </dependency>
+</dependencies></pre>
+            </li>
+            <li><strong>Program:</strong></li>
+            <div class="code-label">A.java</div>
+            <pre>@Configuration
+public class A
+{
+  @Bean
+  ...
+  @Bean
+  ...
+}</pre>
+            <div class="code-label">B.java</div>
+            <pre>@RestController
+@RequestMapping("/request")
+public class B
+{
+  @PostMapping("/post")
+  public String post()
+  {
+      return "CC";
+  }
+}</pre>
+            <div class="code-label">Main.java</div>
+            <pre>@SpringBootApplication
+public class Main
+{
+  public static void main(String[] args)
+  {
+    SpringApplication.run(Main.class, args);
+  }
+}</pre>
+            <li><strong>Output:</strong></li>
+            <div class="output"><strong>CC</strong></div>
+        </ul>
+    </div>
+
+    <header><strong>API&M Unit-05</strong></header>
+    <div class="container">
+        <h2><strong>9)Spring Rest Endpoints</strong></h2>
+        <ul class="i">
+            <li>-Securing Spring REST endpoints is an essential part of building secure web applications.</li>
+            <li>-It ensures that only authorized users can access the Application and protects the data from attackers.</li>
+            <li><strong>i)Integration:</strong>
+                <ul>
+                    <li>Spring Security provides built-in mechanisms for authentication and authorization.</li>
+                    <li>Authentication:
+                        <ul>
+                            <li>The process of verifying the identity of a user or device is called as Authentication.</li>
+                        </ul>
+                    </li>
+                    <li>It protects from the common attacks like Injection, session hijacking etc.</li>
+                    <li>@EnableWebSecurity annotation is used to provide configuration.</li>
+                    <li>Example:
+                        <pre>@EnableWebSecurity
+public class A
+{
+  @Bean
+  ...
+}</pre>
+                    </li>
+                </ul>
+            </li>
+            <li><strong>ii)Custom Security Policies:</strong>
+                <ul>
+                    <li>-If built-in policies aren’t enough for your Application, you can create custom security policies to handle your specific needs.</li>
+                    <li>-@PreAuthorize annotation is used to define access rules.</li>
+                    <li>Example:
+                        <pre>@RestController
+@RequestMapping("/request")
+public class A
+{
+  @PreAuthorize(...)
+  ...
+}</pre>
+                    </li>
+                </ul>
+            </li>
+            <li><strong>iii)Security:</strong>
+                <ul>
+                    <li>Instead of using HTTP, use HTTPS for extra security.</li>
+                    <li>JWT or OAuth2 are used for token-based Authentication.</li>
+                    <li>JWT stands for JSON Web Token.</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <header><strong>API&M Unit-05</strong></header>
+    <div class="container">
+        <h2><strong>10)CORS</strong></h2>
+        <ul class="i">
+            <li>There are mainly two ways to provide CORS:
+                <ul>
+                    <li><strong>a)@CrossOrigin Annotation</strong></li>
+                    <li><strong>b)Global CORS Configuration</strong></li>
+                </ul>
+            </li>
+            <li><strong>Program:</strong></li>
+            <div class="code-label">A.java</div>
+            <pre>@RestController
+@RequestMapping("/request")
+@CrossOrigin(origins = "http://www.google.com/")
+public class A
+{
+  @PostMapping("/post")
+  public String post()
+  {
+     return "CC";
+  }
+}</pre>
+            <div class="code-label">Main.java</div>
+            <pre>@SpringBootApplication
+public class Main
+{
+  public static void main(String[] args)
+  {
+    SpringApplication.run(Main.class, args);
+  }
+}</pre>
+            <li><strong>Output:</strong></li>
+            <div class="output"><strong>CC</strong></div>
+        </ul>
+    </div>
+
+    <div id="lightbox">
+        <img id="lightbox-img" src="" alt="Enlarged view">
+    </div>
+
+    <div id="image-tip">Click image to enlarge</div>
+
+    <script>
+        const lightbox = document.getElementById("lightbox");
+        const lightboxImg = document.getElementById("lightbox-img");
+
+        document.querySelectorAll("img").forEach(img => {
+            img.addEventListener("click", () => {
+                lightboxImg.src = img.src;
+                lightbox.classList.add("active");
+            });
+        });
+
+        lightbox.addEventListener("click", () => {
+            lightbox.classList.remove("active");
+        });
+
+        window.addEventListener("DOMContentLoaded", () => {
+            const tip = document.getElementById("image-tip");
+            if (tip) {
+                tip.classList.add("show");
+                setTimeout(() => tip.classList.remove("show"), 5000);
+            }
+        });
+    </script>
+
+</body>
+
+</html>
