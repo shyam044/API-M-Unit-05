@@ -378,12 +378,12 @@ public class Main
             <li>Response Entity represents the full HTTP Response</li>
             <li>It includes:
                 <ul>
-                    <li>-HTTP Status Code</li>
-                    <li>-Response Header</li>
-                    <li>-Response Body</li>
+                    <li>HTTP Status Code</li>
+                    <li>Response Header</li>
+                    <li>Response Body</li>
                 </ul>
             </li>
-            <li>-Response Entity returns "Status + Body"</li>
+            <li>Response Entity returns "Status + Body"</li>
             <li><strong>Syntax:</strong>
                 <pre>@RestController
 @RequestMapping("/request")
@@ -471,12 +471,12 @@ public class Main
             </li>
             <li><strong>iii)Response Body:</strong>
                 <ul>
-                    <li>-It contains the actual data</li>
+                    <li>It contains the actual data</li>
                 </ul>
             </li>
             <li><strong>iii)Instead of POJO:</strong>
                 <ul>
-                    <li>-POJO + status + header + body</li>
+                    <li>POJO + status + header + body</li>
                 </ul>
             </li>
         </ul>
@@ -484,10 +484,11 @@ public class Main
 
     <header><strong>API&M Unit-05</strong></header>
     <div class="container">
-        <h2><strong>4)@PathVariable, @RequestParam, and @MatrixVariable</strong></h2>
+        <h2><strong>4)@PathVariable, @RequestParam, and @MatrixVariable</strong>         <br/><strong>(or)</strong><br/>
+            <strong>Handling Optional & Required Parameters in Spring REST?</strong></h2>
+
         <ul class="i">
-            <li><strong>(or)</strong></li>
-            <li><strong>Handling Optional & Required Parameters in Spring REST?</strong></li>
+           
             <li><strong>@PathVariable:</strong>
                 <ul>
                     <li>Extract the values from the URL</li>
@@ -770,8 +771,8 @@ public class Main
     <div class="container">
         <h2><strong>9)Spring Rest Endpoints</strong></h2>
         <ul class="i">
-            <li>-Securing Spring REST endpoints is an essential part of building secure web applications.</li>
-            <li>-It ensures that only authorized users can access the Application and protects the data from attackers.</li>
+            <li>Securing Spring REST endpoints is an essential part of building secure web applications.</li>
+            <li>It ensures that only authorized users can access the Application and protects the data from attackers.</li>
             <li><strong>i)Integration:</strong>
                 <ul>
                     <li>Spring Security provides built-in mechanisms for authentication and authorization.</li>
@@ -794,8 +795,8 @@ public class A
             </li>
             <li><strong>ii)Custom Security Policies:</strong>
                 <ul>
-                    <li>-If built-in policies aren’t enough for your Application, you can create custom security policies to handle your specific needs.</li>
-                    <li>-@PreAuthorize annotation is used to define access rules.</li>
+                    <li>If built-in policies aren’t enough for your Application, you can create custom security policies to handle your specific needs.</li>
+                    <li>@PreAuthorize annotation is used to define access rules.</li>
                     <li>Example:
                         <pre>@RestController
 @RequestMapping("/request")
@@ -888,3 +889,4 @@ public class Main
 
 
 </html>
+
